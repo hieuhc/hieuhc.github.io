@@ -18,5 +18,18 @@ links:
 
 permalink:        /posts/:title
 defaults:
-  - values:
-      layout: "default"
+  -
+    scope:
+      path:         ""
+    values:
+      layout:       "null"
+  -
+    scope:
+      type:         "pages"
+    values:
+      layout:       "page"
+  -
+    scope:
+      type:         "posts"
+    values:
+      layout:       "post"

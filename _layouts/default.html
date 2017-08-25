@@ -40,12 +40,8 @@
             {% endif %}
           </div>
         {% endif %}
-        <div class="markdown-body">
-          {{ content }}
-        </div>
-        {% if is_post %}{% include signoff.html %}{% endif %}
+        {{ content }}
       </main>
-      {% if is_post %}{% include pagination.html %}{% endif %}
     </div>
     <footer class="mw7 center tc pt3 pb4 silver">
       Built with Jekyll using <a href="http://github.com/muan/scribble" class="link silver hover-blue pv1">Scribble</a>.
