@@ -45,6 +45,8 @@
     padding-left: 3.8rem;
 }
 
+/* end Markdown styles */
+
 .divider {
     background: #ddd;
     background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), color-stop(#ccc), to(rgba(255, 255, 255, 0)));
@@ -57,5 +59,3 @@
     text-align: center;
     margin: 0 auto;
 }
-
-/* end Markdown styles */

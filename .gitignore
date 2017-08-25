@@ -1,4 +1,6 @@
 _site/
 .sass-cache
 .ruby-version
-.idea/
+.idea/*
+*.iml
+.DS_Store
