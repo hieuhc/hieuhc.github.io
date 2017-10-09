@@ -2,6 +2,9 @@
 title: A review on technology stack for microservices architecture with Python
 date: 2017-10-02 20:15:20
 ---
+<h4>Table of Contents</h4>
+* TOC
+{:toc}
 
 # Context
 My recent task was to design and build a general purpose platform to host analytics services, which could be possibly different kinds
@@ -116,7 +119,7 @@ While REST and Swagger(Open API) is a good combination for exposing services to 
  so how do we decide which one to use in our case? 
  
  
-## Rabbit MQ vs Kafka
+# Rabbit MQ vs Kafka
 With 10 years since the first release and 35000 production deployments world-wide, Rabbit MQ is really a matured message 
 broker platform. It supports multiple message platforms including AMQP, STOMP, MQTT, etc. Its client in Python
 is [Pika](https://github.com/pika/pika). To handle request and respond kind of service, Rabbit MQ uses Remote Procedure Call (RPC)

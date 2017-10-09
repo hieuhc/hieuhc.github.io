@@ -9,6 +9,9 @@ with 32 data nodes. It also offers a rich SQL-like query language and a HTTP API
 with InfluxDB to see if choosing InfluxDB is a good move compared to our current database. This blog demonstrates our attempts to install and make InfluxDB scable (without using enterprise version)
 on a Azure cluster powered by Kubernetes.
 
+* TOC
+{:toc}
+
 ## Install InfluxDB on a Azure cluster with Kubernetes
 
 Why Azure and Kubernetes? At eSmart Systems we use Azure in most of our infrastructure components. [Kubernetes](https://kubernetes.io/) is a matured platform designed for automating deploying, scaling, operating

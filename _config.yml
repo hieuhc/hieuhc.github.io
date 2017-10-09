@@ -15,11 +15,6 @@ links:
     url:          /about
     external:     false
 
-markdown: kramdown
-
-kramdown:
-  parse_block_html: true
-
 permalink:        /posts/:title
 
 defaults:
@@ -38,5 +33,7 @@ defaults:
       type:         "posts"
     values:
       layout:       "post"
+
+markdown: kramdown
 
 # ------------ CONFIGURABLE END ------------
