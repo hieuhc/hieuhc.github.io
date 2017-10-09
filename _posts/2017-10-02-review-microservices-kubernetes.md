@@ -3,7 +3,7 @@ title: A review on technology stack for microservices architecture with Python
 date: 2017-10-02 20:15:20
 ---
 
-## Context
+# Context
 My recent task was to design and build a general purpose platform to host analytics services, which could be possibly different kinds
 of services, i.e prediction, monitoring, performance tracking, logging, etc. So I have had a chance to take a close look into 
 microservices architecture. While microservices is not a new term to me, it floats over many technical articles and I also
@@ -30,12 +30,12 @@ building complex logic layer among services on top. Now, this part is more excit
 we would like to have connections between services, and furthermore a connection could be either a request-and-respond pattern or a
 fire-and-forget pattern. A very interesting presentation on this can be found on slideshare [here](https://www.slideshare.net/ewolff/rest-vs-messaging-for-microservices).
 So at this point, there is one more requirement a microservices system must have to allow flexible services' dependencies, which
-is the fifth requirement with synchronous and asynchronous concepts. This is actually the decisive point that differentiate systems' architecture. 
-Following we will explain more about synchronous and asynchronous operations and discuss options we can consider for this feature.
+is the fifth requirement with synchronous and asynchronous concepts. This is actually the decisive point that differentiates systems' architecture. 
+Following I will explain more about synchronous and asynchronous operations and discuss options I can consider for this feature.
  
 
 
-## Synchronous and asynchronous
+# Synchronous and asynchronous
 So what is synchronous? Basically synchronous(sync) means ordering, first come first serve. A request needs to be completed before
 the next one is processed. There are many examples for synchronous operations. Whenever you login to a website,
 you have to wait until its server verifies your account and sends feedback to your browser, before you can do other tasks.
@@ -69,7 +69,7 @@ results to downstream services after processing. Furthermore, some of our servic
  along with API while the rest only need to execute their own logic and the results will be used later. A variety of frameworks and protocols
  are taken into account.
  
-## Rest vs messaging
+# Rest vs messaging
 Following recent trends for microservices systems, there seems to be two main protocols for inter communication among services:
 REST and messages driven. Actually, REST is the first thing pop up on our head when thinking about the service itself.
  In Python it is relatively easy to use [Flask](http://flask.pocoo.org/) framework to wrap a service with Swagger API. For a
@@ -91,7 +91,23 @@ It fits naturally with fire and forget model, also supports async mechanism. Wit
  aspect in of microservices' architecture. Other than those, the broker is also a load balancer, takes care of message resilience
  in case of failures, etc. It relieves load of work and make services focus only on their own execution logic. The only downside
  for systems powered by a message broker is how to handle request/respond kind of service. This can be solved by using correlation id
- for matching caller id to the response although this is quite ad hoc and not too direct. 
+ for matching caller id to the response although this is quite ad hoc and not too direct. Following is a code sample using RPC from Rabbit MQ tutorial
+ to implement a trigger function at server side for request and response model.
+ 
+```python
+def on_request(ch, method, props, body):
+    n = int(body)
+
+    print(" [.] fib(%s)" % n)
+    response = fib(n)
+
+    ch.basic_publish(exchange='',
+                     routing_key=props.reply_to,
+                     properties=pika.BasicProperties(correlation_id = \
+                                                         props.correlation_id),
+                     body=str(response))
+    ch.basic_ack(delivery_tag = method.delivery_tag)
+```
  
 While REST and Swagger(Open API) is a good combination for exposing services to external world, messages broker offers the ability
  to decouple services and ensure messages throughput as well as their resilience. Our system eventually contains both kind of services depending
@@ -102,7 +118,7 @@ While REST and Swagger(Open API) is a good combination for exposing services to 
  
 ## Rabbit MQ vs Kafka
 With 10 years since the first release and 35000 production deployments world-wide, Rabbit MQ is really a matured message 
-broker platform. It supports multiple a variety of message platforms including AMQP, STOMP, MQTT, etc. Its client in Python
+broker platform. It supports multiple message platforms including AMQP, STOMP, MQTT, etc. Its client in Python
 is [Pika](https://github.com/pika/pika). To handle request and respond kind of service, Rabbit MQ uses Remote Procedure Call (RPC)
 which is a blocking(sync) remote message protocol and a `reply_to` queue from a receiver to a sender. Then to make it async,
 a `correlation_id` is sent along to filter which request a response is for.
@@ -111,6 +127,10 @@ However after some references, we pick Kafka as our message broker system to dep
 +    A topic is distributed across multiple partitions. Hence it is scalable and allows fault-tolerance. Each consumer in
 a consumer group subscribes only one partition to make sure the order of messages processed. This feature is crucial in
 streaming or real time applications. 
+
+![kafka-topic](../images/kafka_log_anatomy.png)
+
+*Kafka log anatomy (from [Apache Kafka](http://kafka.apache.org))*
 
 +    Kafka run on top of Zookeeper which is a centralized service for maintaining configuration information, naming,
 providing distributed synchronization, etc. Many of Hadoop solutions depend on Zookeeper so it is good to get used to
@@ -131,10 +151,11 @@ or for building highly scalable, distributed streaming applications (Kafka Strea
 during the time and it is expected to be a powerful framework for streaming as well as messages broker soon. We use [confluent-kafka-python](https://github.com/confluentinc/confluent-kafka-python)
 for sending/receiving messages as well as validating messages with schema registry.
 
-## Final architecture
+# Final architecture
 To conclude this blog post, we introduce our infrastructure architecture for microservices. 
 
 ![microservice-infrastructure](../images/microservice-infrastructure.png)
+*Our microservices architecture*
 
 
 It has two main components. First is a docker container registry that hosts all our docker images for every kind of services and infrastructures such as Zookeeper,

@@ -14,9 +14,14 @@ links:
   - name:         About me
     url:          /about
     external:     false
-# ------------ CONFIGURABLE END ------------
+
+markdown: kramdown
+
+kramdown:
+  parse_block_html: true
 
 permalink:        /posts/:title
+
 defaults:
   -
     scope:
@@ -33,3 +38,5 @@ defaults:
       type:         "posts"
     values:
       layout:       "post"
+
+# ------------ CONFIGURABLE END ------------
